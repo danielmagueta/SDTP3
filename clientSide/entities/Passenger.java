@@ -6,8 +6,8 @@
 package clientSide.entities;
 
 import genclass.GenericIO;
-import clientSide.stubs.*;
 import commInfra.*;
+import interfaces.*;
 
 /**
  *   Passenger thread.
@@ -34,19 +34,19 @@ public class Passenger extends Thread{
    *  Reference to the departure airport.
    */
 
-   private final DepartureAirportStub dAirport;
+   private final DepartureInterface dAirport;
    
    /**
    *  Reference to the plane.
    */
 
-   private final PlaneStub plane;
+   private final PlaneInterface plane;
    
    /**
    *  Reference to the arrival airport.
    */
 
-   private final ArrivalAirportStub aAirport;
+   private final ArrivalAirportInterface aAirport;
 
    /**
    *   Instantiation of a passenger thread.
@@ -58,7 +58,7 @@ public class Passenger extends Thread{
    *     @param aAirport reference to the arrival airport
    */
 
-   public Passenger (String name, int passengerId, DepartureAirportStub dAirport, PlaneStub plane, ArrivalAirportStub aAirport)
+   public Passenger (String name, int passengerId, DepartureAirportInterface dAirport, PlaneInterface plane, ArrivalAirportInterface aAirport)
    {
       super (name);
       this.passengerId = passengerId;

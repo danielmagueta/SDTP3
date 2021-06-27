@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package clientSide.entities;
-import clientSide.stubs.*;
 import commInfra.*;
 
 
