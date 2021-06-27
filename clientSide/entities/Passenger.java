@@ -8,6 +8,8 @@ package clientSide.entities;
 import genclass.GenericIO;
 import commInfra.*;
 import interfaces.*;
+import java.rmi.*;
+
 
 /**
  *   Passenger thread.
@@ -34,7 +36,7 @@ public class Passenger extends Thread{
    *  Reference to the departure airport.
    */
 
-   private final DepartureInterface dAirport;
+   private final DepartureAirportInterface dAirport;
    
    /**
    *  Reference to the plane.
@@ -53,9 +55,9 @@ public class Passenger extends Thread{
    *
    *     @param name thread name
    *     @param passengerId passenger id
-   *     @param dAirport reference to the departure airport
-   *     @param plane reference to the plane
-   *     @param aAirport reference to the arrival airport
+   *     @param dAirport remote reference to the departure airport
+   *     @param plane remote reference to the plane
+   *     @param aAirport remote reference to the arrival airport
    */
 
    public Passenger (String name, int passengerId, DepartureAirportInterface dAirport, PlaneInterface plane, ArrivalAirportInterface aAirport)
