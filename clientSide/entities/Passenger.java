@@ -15,7 +15,8 @@ import java.rmi.*;
  *   Passenger thread.
  *
  *   It simulates the passenger life cycle.
- *   Static solution.
+ *   Implementation of a client-server model of type 2 (server replication).
+ *   Communication is based on remote calls under Java RMI.
  */
 
 public class Passenger extends Thread{
@@ -119,11 +120,11 @@ public class Passenger extends Thread{
     {
        
        travelToAirport ();                                   // the passenger travels to airport
-       dAirport.waitInQueue ();                              // the passenger enters the queue to be checked by the hostess
-       dAirport.showDocuments ();                            // the passenger show docuemnts to hostess
-       plane.boardThePlane();                                // the passenger boards the plane
-       plane.waitForEndOfFligh();                            // the passenger awaits the end of the flight
-       aAirport.leaveThePlane();                             // the passenger leaves the plane at the destination point   
+       waitInQueue ();                              // the passenger enters the queue to be checked by the hostess
+       showDocuments ();                            // the passenger show docuemnts to hostess
+       boardThePlane();                                // the passenger boards the plane
+       waitForEndOfFligh();                            // the passenger awaits the end of the flight
+       leaveThePlane();                             // the passenger leaves the plane at the destination point   
     }
     
    /**
@@ -139,6 +140,105 @@ public class Passenger extends Thread{
         }
         catch (InterruptedException e) {}
     }
+
+    /**
+   *  Passenger wait in queue
+   *
+   *  Remote operation.
+   *
+   */
+
+  private void waitInQueue()
+  {                           
+
+     try
+     { dAirport.waitInQueue(); 
+     }
+     catch (RemoteException e)
+     { GenericIO.writelnString ("Passenger " + passengerId + " remote exception on waitInQueue: " + e.getMessage ());
+       System.exit (1);
+     }
+
+  }
  
+      /**
+   *  Passenger show documents
+   *
+   *  Remote operation.
+   *
+   */
+
+  private void showDocuments()
+  {                           
+
+     try
+     { dAirport.showDocuments(); 
+     }
+     catch (RemoteException e)
+     { GenericIO.writelnString ("Passenger " + passengerId + " remote exception on showDocuments: " + e.getMessage ());
+       System.exit (1);
+     }
+
+  }
+
+        /**
+   *  Passenger board the plane
+   *
+   *  Remote operation.
+   *
+   */
+
+  private void boardThePlane()
+  {                           
+
+     try
+     { plane.boardThePlane(); 
+     }
+     catch (RemoteException e)
+     { GenericIO.writelnString ("Passenger " + passengerId + " remote exception on boardThePlane: " + e.getMessage ());
+       System.exit (1);
+     }
+
+  }
+
+        /**
+   *  Passenger wait for end of flight
+   *
+   *  Remote operation.
+   *
+   */
+
+  private void waitForEndOfFligh()
+  {                           
+
+     try
+     { plane.waitForEndOfFligh(); 
+     }
+     catch (RemoteException e)
+     { GenericIO.writelnString ("Passenger " + passengerId + " remote exception on waitForEndOfFlight: " + e.getMessage ());
+       System.exit (1);
+     }
+
+  }
+
+        /**
+   *  Passenger leave the plane
+   *
+   *  Remote operation.
+   *
+   */
+
+  private void leaveThePlane()
+  {                           
+
+     try
+     { aAirport.leaveThePlane(); 
+     }
+     catch (RemoteException e)
+     { GenericIO.writelnString ("Passenger " + passengerId + " remote exception on leaveThePlane: " + e.getMessage ());
+       System.exit (1);
+     }
+
+  }
 
 }
