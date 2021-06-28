@@ -159,7 +159,7 @@ public class ArrivalAirport implements ArrivalAirportInterface {
    {
        nEntities += 1;
        if (nEntities >= 3)
-          ArrivalAirportMain.waitConnection = false;
+          ArrivalAirportMain.shutdown();
    }    
 
 }

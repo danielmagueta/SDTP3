@@ -496,7 +496,7 @@ public class GeneralRepos implements GeneralReposInterface
    {
        nEntities += 1;
        if (nEntities >= 3)
-          GeneralReposMain.waitConnection = false;
+          GeneralReposMain.shutdown();
    }
    
 }

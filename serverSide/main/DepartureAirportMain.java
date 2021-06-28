@@ -8,13 +8,13 @@ import interfaces.*;
 import genclass.GenericIO;
 
 /**
- *    Instantiation and registering of a general repository object.
+ *    Instantiation and registering of a departure airport object.
  *
  *    Implementation of a client-server model of type 2 (server replication).
  *    Communication is based on Java RMI.
  */
 
-public class GeneralReposMain
+public class DepartureAirportMain
 {
   /**
    *  Flag signaling the end of operations.
@@ -27,10 +27,10 @@ public class GeneralReposMain
    *
    *        args[0] - port number for listening to service requests
    *        args[1] - name of the platform where is located the RMI registering service
-   *        args[2] - port nunber where the registering service is listening to service requests
+   *        args[2] - port number where the registering service is listening to service requests
    */
 
-   public static void main(String[] args)
+   public static void main (String[] args)
    {
       int portNumb = -1;                                             // port number for listening to service requests
       String rmiRegHostName;                                         // name of the platform where is located the RMI registering service
@@ -70,29 +70,11 @@ public class GeneralReposMain
          System.setSecurityManager (new SecurityManager ());
       GenericIO.writelnString ("Security manager was installed!");
 
-     /* instantiate a general repository object */
+     /* get a remote reference to the general repository object */
 
-      GeneralRepos repos = new GeneralRepos ();                      // general repository object
+      String nameEntryGeneralRepos = "GeneralRepository";            // public name of the general repository object
       GeneralReposInterface reposStub = null;                        // remote reference to the general repository object
-
-      try
-      { reposStub = (GeneralReposInterface) UnicastRemoteObject.exportObject (repos, portNumb);
-      }
-      catch (RemoteException e)
-      { GenericIO.writelnString ("General Repository stub generation exception: " + e.getMessage ());
-        e.printStackTrace ();
-        System.exit (1);
-      }
-      GenericIO.writelnString ("Stub was generated!");
-
-     /* register it with the general registry service */
-
-      String nameEntryBase = "RegisterHandler";                      // public name of the object that enables the registration
-                                                                     // of other remote objects
-      String nameEntryObject = "GeneralRepository";                  // public name of the object general repository
       Registry registry = null;                                      // remote reference for registration in the RMI registry service
-      Register reg = null;                                           // remote reference to the object that enables the registration
-                                                                     // of other remote objects
 
       try
       { registry = LocateRegistry.getRegistry (rmiRegHostName, rmiRegPortNumb);
@@ -103,6 +85,43 @@ public class GeneralReposMain
         System.exit (1);
       }
       GenericIO.writelnString ("RMI registry was created!");
+
+      try
+      { reposStub = (GeneralReposInterface) registry.lookup (nameEntryGeneralRepos);
+      }
+      catch (RemoteException e)
+      { GenericIO.writelnString ("GeneralRepos lookup exception: " + e.getMessage ());
+        e.printStackTrace ();
+        System.exit (1);
+      }
+      catch (NotBoundException e)
+      { GenericIO.writelnString ("GeneralRepos not bound exception: " + e.getMessage ());
+        e.printStackTrace ();
+        System.exit (1);
+      }
+
+     /* instantiate a barber shop object */
+
+      DepartureAirport dAirport = new DepartureAirport (reposStub);                 // departure airport object
+      DepartureAirportInterface dAirportStub = null;                          // remote reference to the departure airport object
+
+      try
+      { dAirportStub = (DepartureAirportInterface) UnicastRemoteObject.exportObject (dAirport, portNumb);
+      }
+      catch (RemoteException e)
+      { GenericIO.writelnString ("Barber Shop stub generation exception: " + e.getMessage ());
+        e.printStackTrace ();
+        System.exit (1);
+      }
+      GenericIO.writelnString ("Stub was generated!");
+
+     /* register it with the general registry service */
+
+      String nameEntryBase = "RegisterHandler";                      // public name of the object that enables the registration
+                                                                     // of other remote objects
+      String nameEntryObject = "DepartureAirport";                         // public name of the departure airport object
+      Register reg = null;                                           // remote reference to the object that enables the registration
+                                                                     // of other remote objects
 
       try
       { reg = (Register) registry.lookup (nameEntryBase);
@@ -119,70 +138,70 @@ public class GeneralReposMain
       }
 
       try
-      { reg.bind (nameEntryObject, reposStub);
+      { reg.bind (nameEntryObject, dAirportStub);
       }
       catch (RemoteException e)
-      { GenericIO.writelnString ("General Repository registration exception: " + e.getMessage ());
+      { GenericIO.writelnString ("Departure Airport registration exception: " + e.getMessage ());
         e.printStackTrace ();
         System.exit (1);
       }
       catch (AlreadyBoundException e)
-      { GenericIO.writelnString ("General Repository already bound exception: " + e.getMessage ());
+      { GenericIO.writelnString ("Departure Airport already bound exception: " + e.getMessage ());
         e.printStackTrace ();
         System.exit (1);
       }
-      GenericIO.writelnString ("General Repository object was registered!");
+      GenericIO.writelnString ("Departure Airport object was registered!");
 
      /* wait for the end of operations */
 
-      GenericIO.writelnString ("General Repository is in operation!");
+      GenericIO.writelnString ("Departure Airport is in operation!");
       try
       { while (!end)
-          synchronized (Class.forName ("serverSide.main.GeneralReposMain"))
+          synchronized (Class.forName ("serverSide.main.DepartureAirportMain"))
           { try
-            { (Class.forName ("serverSide.main.GeneralReposMain")).wait ();
+            { (Class.forName ("serverSide.main.DepartureAirportMain")).wait ();
             }
             catch (InterruptedException e)
-            { GenericIO.writelnString ("General Repository main thread was interrupted!");
+            { GenericIO.writelnString ("Departure Airport main thread was interrupted!");
             }
           }
       }
       catch (ClassNotFoundException e)
-      { GenericIO.writelnString ("The data type ServerSleepingBarbersGeneralRepos was not found (blocking)!");
+      { GenericIO.writelnString ("The data type DepartureAirportMain was not found (blocking)!");
         e.printStackTrace ();
         System.exit (1);
       }
 
      /* server shutdown */
 
-      boolean shutdownDone = false;                                  // flag signalling the shutdown of the general repository service
+      boolean shutdownDone = false;                                  // flag signalling the shutdown of the departure airport service
 
       try
       { reg.unbind (nameEntryObject);
       }
       catch (RemoteException e)
-      { GenericIO.writelnString ("General Repository deregistration exception: " + e.getMessage ());
+      { GenericIO.writelnString ("DepartureAirport deregistration exception: " + e.getMessage ());
         e.printStackTrace ();
         System.exit (1);
       }
       catch (NotBoundException e)
-      { GenericIO.writelnString ("General Repository not bound exception: " + e.getMessage ());
+      { GenericIO.writelnString ("DepartureAirport not bound exception: " + e.getMessage ());
         e.printStackTrace ();
         System.exit (1);
       }
-      GenericIO.writelnString ("General Repository was deregistered!");
+      GenericIO.writelnString ("DepartureAirport was deregistered!");
 
       try
-      { shutdownDone = UnicastRemoteObject.unexportObject (repos, true);
+      { shutdownDone = UnicastRemoteObject.unexportObject (dAirport, true);
       }
       catch (NoSuchObjectException e)
-      { GenericIO.writelnString ("General Repository unexport exception: " + e.getMessage ());
+      { GenericIO.writelnString ("Departure Airport unexport exception: " + e.getMessage ());
         e.printStackTrace ();
         System.exit (1);
       }
 
       if (shutdownDone)
-         GenericIO.writelnString ("General Repository was shutdown!");
+         GenericIO.writelnString ("Departure Airport was shutdown!");
    }
 
   /**
@@ -193,12 +212,12 @@ public class GeneralReposMain
    {
       end = true;
       try
-      { synchronized (Class.forName ("serverSide.main.GeneralReposMain"))
-        { (Class.forName ("serverSide.main.GeneralReposMain")).notify ();
+      { synchronized (Class.forName ("serverSide.main.DepartureAirportMain"))
+        { (Class.forName ("serverSide.main.DepartureAirportMain")).notify ();
         }
       }
      catch (ClassNotFoundException e)
-     { GenericIO.writelnString ("The data type GeneralReposMain was not found (waking up)!");
+     { GenericIO.writelnString ("The data type DepartureAirportMain was not found (waking up)!");
        e.printStackTrace ();
        System.exit (1);
      }

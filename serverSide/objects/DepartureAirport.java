@@ -521,7 +521,7 @@ public class DepartureAirport implements DepartureAirportInterface{
    {
        nEntities += 1;
        if (nEntities >= 3)
-          DepartureAirportMain.waitConnection = false;
+          DepartureAirportMain.shutdown();
    }    
 
     
