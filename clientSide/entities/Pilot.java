@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package clientSide.entities;
-import clientSide.stubs.*;
 import commInfra.*;
 import genclass.GenericIO;
 import java.rmi.*;
@@ -107,7 +106,7 @@ public class Pilot extends Thread{
          parkAtTransferGate();                         //the pilot parks the plane in the departure airport
          if(getnPassengerArrived() == SimulPar.N)
          {
-             dAirport.endHostess();                             //unblock the hostess thread so she can end
+             endHostess();                             //unblock the hostess thread so she can end
          }
        }
     }
@@ -124,7 +123,7 @@ public class Pilot extends Thread{
   private int getnPassengerArrived()
   {                           
      
-     int res;
+     int res = -1;
      try
      { res = aAirport.getnPassengerArrived(); 
      }
@@ -162,7 +161,7 @@ public class Pilot extends Thread{
    *
    */
 
-  private int waitForAllInBoard()
+  private void waitForAllInBoard()
   {                           
      
      try
@@ -224,7 +223,7 @@ public class Pilot extends Thread{
   private int getnINF()
   {                           
      
-     int res;
+     int res = -1;
      try
      { res = plane.getnINF(); 
      }
@@ -246,7 +245,7 @@ public class Pilot extends Thread{
   private int getnOut()
   {                           
      
-     int res;
+     int res = -1;
      try
      { res = aAirport.getnOut(); 
      }

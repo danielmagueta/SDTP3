@@ -134,7 +134,7 @@ public class Hostess extends Thread{
   private int getnPassengerArrived()
   {                           
      
-     int res;
+     int res = -1;
      try
      { res = aAirport.getnPassengerArrived(); 
      }
@@ -176,7 +176,7 @@ public class Hostess extends Thread{
   private int checkDocuments()
   {                           
      
-     int res;
+     int res = -1;
      try
      { res = dAirport.checkDocuments(); 
      }
@@ -199,7 +199,7 @@ public class Hostess extends Thread{
   private boolean waitForNextPassenger(int passengerID)
   {                           
      
-     boolean res;
+     boolean res = false;
      try
      { res = dAirport.waitForNextPassenger(passengerID); 
      }

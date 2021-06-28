@@ -288,7 +288,7 @@ public class Plane implements PlaneInterface {
    {
        nEntities += 1;
        if (nEntities >= 2)
-          PlaneMain.waitConnection = false;
+          PlaneMain.shutdown();
    }
     
     
