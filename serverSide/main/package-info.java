@@ -1,9 +1,9 @@
 /**
- *  Server side of the AirLift Problem.
+ *  Server generation.
  *
+ *    Static solution based on semaphores for synchronization.
  *    Implementation of a client-server model of type 2 (server replication).
  *    Communication is based on Java RMI.
  */
 
-package serverSide;
-
+package serverSide.main;
